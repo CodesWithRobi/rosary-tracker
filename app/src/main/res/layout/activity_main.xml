@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    tools:context=".MainActivity">
+
+    <!-- Mystery set label (e.g. "Joyful") -->
+    <TextView
+        android:id="@+id/textViewSetLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/purple_200"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Joyful Mysteries" />
+
+    <!-- Current mystery name (e.g. "The Nativity") -->
+    <TextView
+        android:id="@+id/textViewMysteryName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/textViewSetLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/textViewMysteryNumber"
+        tools:text="The Nativity" />
+
+    <!-- Mystery number (e.g. "3 of 20") -->
+    <TextView
+        android:id="@+id/textViewMysteryNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintTop_toBottomOf="@id/textViewMysteryName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/controlsRow"
+        tools:text="3 of 20" />
+
+    <!-- Prev / Play / Next controls -->
+    <LinearLayout
+        android:id="@+id/controlsRow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/textViewMysteryNumber"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/textViewCompletion">
+
+        <ImageButton
+            android:id="@+id/buttonPrevious"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="16dp"
+            android:src="@android:drawable/ic_media_previous"
+            android:contentDescription="Previous mystery"
+            style="?attr/borderlessButtonStyle" />
+
+        <ImageButton
+            android:id="@+id/buttonPlayPause"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginHorizontal="16dp"
+            android:src="@android:drawable/ic_media_play"
+            android:contentDescription="Play or pause"
+            style="?attr/borderlessButtonStyle" />
+
+        <ImageButton
+            android:id="@+id/buttonNext"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="16dp"
+            android:src="@android:drawable/ic_media_next"
+            android:contentDescription="Next mystery"
+            style="?attr/borderlessButtonStyle" />
+
+    </LinearLayout>
+
+    <!-- Completion text (e.g. "2 of 3 rosaries today") -->
+    <TextView
+        android:id="@+id/textViewCompletion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintTop_toBottomOf="@id/controlsRow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/sliderRosaryCount"
+        android:layout_marginTop="24dp"
+        tools:text="2 of 3 rosaries today" />
+
+    <!-- Rosary count label -->
+    <TextView
+        android:id="@+id/textViewSliderLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:text="Target rosaries per day"
+        app:layout_constraintTop_toBottomOf="@id/textViewCompletion"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <!-- Rosary count slider (1-4) -->
+    <SeekBar
+        android:id="@+id/sliderRosaryCount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:min="1"
+        android:max="4"
+        app:layout_constraintTop_toBottomOf="@id/textViewSliderLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <!-- Mode and Audio toggles -->
+    <LinearLayout
+        android:id="@+id/togglesRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/sliderRosaryCount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp">
+
+        <ToggleButton
+            android:id="@+id/toggleMode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textOn="Liturgical"
+            android:textOff="Custom"
+            android:layout_marginEnd="8dp" />
+
+        <ToggleButton
+            android:id="@+id/toggleAudio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textOn="Audio On"
+            android:textOff="Audio Off"
+            android:layout_marginStart="8dp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
