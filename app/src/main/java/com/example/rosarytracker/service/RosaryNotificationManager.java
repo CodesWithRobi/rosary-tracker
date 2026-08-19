@@ -7,7 +7,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import androidx.annotation.OptIn;
 import androidx.core.app.NotificationCompat;
 import androidx.media3.common.util.UnstableApi;
 import androidx.media3.session.MediaSession;
@@ -22,7 +21,7 @@ public class RosaryNotificationManager {
 
     public static final String CHANNEL_ID = "rosary_playback_channel";
     private static final String CHANNEL_NAME = "Rosary Playback";
-    static final int NOTIFICATION_ID = 1;
+    public static final int NOTIFICATION_ID = 1;
 
     private final Context context;
     private final NotificationManager notificationManager;
@@ -38,12 +37,12 @@ public class RosaryNotificationManager {
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
             channel.setShowBadge(false);
-            channel.setSound(null, null); // Keep it silent
+            channel.setSound(null, null); // Keep it silent on updates
             notificationManager.createNotificationChannel(channel);
         }
     }
 
-    @OptIn(markerClass = UnstableApi.class)
+    @UnstableApi
     public Notification buildNotification(RosaryState state, MediaSession mediaSession) {
         Intent contentIntent = new Intent(context, MainActivity.class);
         PendingIntent contentPending = PendingIntent.getActivity(context, 0, contentIntent,
@@ -58,12 +57,11 @@ public class RosaryNotificationManager {
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
         // On Android 14+, foreground services of type mediaPlayback MUST use MediaStyle.
-        // We set basic title/text first, then try to apply MediaStyle if session is ready.
-        String title = (state != null) ? state.getCurrentMysteryName() : "Rosary Tracker";
-        builder.setContentTitle(title)
-               .setContentText("Rosary Tracker");
-
+        // We apply it as soon as mediaSession is available, even if state is still loading.
         if (mediaSession != null) {
+            builder.setStyle(new MediaStyleNotificationHelper.MediaStyle(mediaSession)
+                    .setShowActionsInCompactView(0, 1, 2));
+
             // Action intents
             Intent prevIntent = new Intent(context, RosaryPlaybackService.class).setAction("ACTION_PREVIOUS");
             PendingIntent prevPending = PendingIntent.getService(context, 1, prevIntent,
@@ -77,7 +75,7 @@ public class RosaryNotificationManager {
             PendingIntent playPausePending = PendingIntent.getService(context, 3, playPauseIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-            // Add actions
+            // Add actions ALWAYS to ensure MediaStyle indices (0, 1, 2) are consistent
             builder.addAction(android.R.drawable.ic_media_previous, "Previous", prevPending);
             
             boolean isPlaying = (state != null && state.isPlaying);
@@ -85,17 +83,20 @@ public class RosaryNotificationManager {
                     isPlaying ? "Pause" : "Play", playPausePending);
             
             builder.addAction(android.R.drawable.ic_media_next, "Next", nextPending);
-
-            // Apply MediaStyle
-            builder.setStyle(new MediaStyleNotificationHelper.MediaStyle(mediaSession)
-                    .setShowActionsInCompactView(0, 1, 2));
         }
+
+        String title = (state != null) ? state.getCurrentMysteryName() : "Rosary Tracker";
+        builder.setContentTitle(title)
+               .setContentText("Rosary Tracker");
 
         return builder.build();
     }
 
+    @UnstableApi
     public void showNotification(RosaryState state, MediaSession mediaSession) {
-        notificationManager.notify(NOTIFICATION_ID, buildNotification(state, mediaSession));
+        if (mediaSession != null) {
+            notificationManager.notify(NOTIFICATION_ID, buildNotification(state, mediaSession));
+        }
     }
 
     public void cancelNotification() {
