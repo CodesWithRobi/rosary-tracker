@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Minimal rosary motif: gold arc with five beads, largest at top.
-     Centered in the adaptive-icon safe zone, scaled 1.2x. -->
+<!-- Rosary motif: gold arc with five beads, largest at top, and a cross
+     hanging from the centre on a short string. Centered in the adaptive-icon
+     safe zone. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+    <!-- Arc (necklace loop) -->
     <path android:strokeColor="#D4AF37" android:strokeWidth="3.00" android:strokeLineCap="round" android:fillColor="#00000000" android:pathData="M30.10,43.55 A31.20,31.20 0 0 1 77.90,43.55"/>
+    <!-- Beads: two small at the ends, two medium, one large Pater bead on top -->
     <path android:fillColor="#D4AF37" android:pathData="M30.10,43.55 m-3.60,0 a3.60,3.60 0 1,0 7.20,0 a3.60,3.60 0 1,0 -7.20,0"/>
     <path android:fillColor="#D4AF37" android:pathData="M40.81,35.32 m-3.60,0 a3.60,3.60 0 1,0 7.20,0 a3.60,3.60 0 1,0 -7.20,0"/>
     <path android:fillColor="#D4AF37" android:pathData="M54.00,32.40 m-5.40,0 a5.40,5.40 0 1,0 10.80,0 a5.40,5.40 0 1,0 -10.80,0"/>
     <path android:fillColor="#D4AF37" android:pathData="M67.19,35.32 m-3.60,0 a3.60,3.60 0 1,0 7.20,0 a3.60,3.60 0 1,0 -7.20,0"/>
     <path android:fillColor="#D4AF37" android:pathData="M77.90,43.55 m-3.60,0 a3.60,3.60 0 1,0 7.20,0 a3.60,3.60 0 1,0 -7.20,0"/>
+    <!-- String from the loop's centre to the cross -->
+    <path android:strokeColor="#D4AF37" android:strokeWidth="1.5" android:strokeLineCap="round" android:fillColor="#00000000" android:pathData="M54.00,43.55 L54.00,49.00"/>
+    <!-- Hanging cross -->
+    <path android:strokeColor="#D4AF37" android:strokeWidth="3.0" android:strokeLineCap="round" android:fillColor="#00000000" android:pathData="M54.00,44.00 L54.00,78.00"/>
+    <path android:strokeColor="#D4AF37" android:strokeWidth="3.0" android:strokeLineCap="round" android:fillColor="#00000000" android:pathData="M46.50,53.00 L61.50,53.00"/>
 </vector>
