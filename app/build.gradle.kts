@@ -52,6 +52,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel:2.7.0")
     implementation("androidx.lifecycle:lifecycle-runtime:2.7.0")
 
+    // Glide for Image Loading
+    implementation(libs.glide)
+    annotationProcessor(libs.glide.compiler)
+
     // Coroutines (for suspend functions in Room)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 

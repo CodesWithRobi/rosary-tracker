@@ -1,161 +1,399 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Root: content scrolls on top (weight=1), toggles pinned below it at the
+     bottom of the screen. Insets (status bar top, nav bar bottom) are applied
+     as padding on this root by MainActivity. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
-    tools:context=".MainActivity">
+    android:background="@color/background_light"
+    android:orientation="vertical">
 
-    <!-- Mystery set label (e.g. "Joyful") -->
-    <TextView
-        android:id="@+id/textViewSetLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="@color/purple_200"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="Joyful Mysteries" />
+    <ScrollView
+        android:id="@+id/scrollRoot"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
-    <!-- Current mystery name (e.g. "The Nativity") -->
-    <TextView
-        android:id="@+id/textViewMysteryName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/textViewSetLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/textViewMysteryNumber"
-        tools:text="The Nativity" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/contentRoot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background_light"
+            android:padding="24dp">
 
-    <!-- Mystery number (e.g. "3 of 20") -->
-    <TextView
-        android:id="@+id/textViewMysteryNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintTop_toBottomOf="@id/textViewMysteryName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/controlsRow"
-        tools:text="3 of 20" />
+            <!-- Today's Liturgical Header -->
+            <TextView
+                android:id="@+id/textViewTodayHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:letterSpacing="0.15"
+                android:textAllCaps="true"
+                android:textColor="@color/gold_variant"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Wednesday: The Glorious Mysteries" />
 
-    <!-- Prev / Play / Next controls -->
-    <LinearLayout
-        android:id="@+id/controlsRow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@id/textViewMysteryNumber"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/textViewCompletion">
+            <!-- Mystery Artwork — absorbs vertical slack so the whole layout fits the
+             screen without scrolling (0dp + top/bottom constraints + weight). -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardArtwork"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                app:cardBackgroundColor="@color/background_card"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp"
+                app:layout_constraintBottom_toTopOf="@id/textViewSetLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewTodayHeader"
+                app:layout_constraintVertical_weight="1">
 
-        <ImageButton
-            android:id="@+id/buttonPrevious"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_marginEnd="16dp"
-            android:src="@android:drawable/ic_media_previous"
-            android:contentDescription="Previous mystery"
-            style="?attr/borderlessButtonStyle" />
+                <ImageView
+                    android:id="@+id/imageViewArtwork"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="Mystery Artwork"
+                    android:scaleType="centerCrop"
+                    tools:src="@android:drawable/ic_menu_gallery" />
+            </androidx.cardview.widget.CardView>
 
-        <ImageButton
-            android:id="@+id/buttonPlayPause"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_marginHorizontal="16dp"
-            android:src="@android:drawable/ic_media_play"
-            android:contentDescription="Play or pause"
-            style="?attr/borderlessButtonStyle" />
+            <!-- Mystery set label -->
+            <TextView
+                android:id="@+id/textViewSetLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/gold_variant"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardArtwork"
+                tools:text="Joyful Mysteries" />
 
-        <ImageButton
-            android:id="@+id/buttonNext"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
-            android:src="@android:drawable/ic_media_next"
-            android:contentDescription="Next mystery"
-            style="?attr/borderlessButtonStyle" />
+            <!-- Current mystery name -->
+            <TextView
+                android:id="@+id/textViewMysteryName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:padding="8dp"
+                android:textColor="@color/deep_blue"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewSetLabel"
+                tools:text="1st Joyful The Annunciation" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/textViewMysteryNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/grey_dark"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewMysteryName"
+                tools:text="3 of 20" />
 
-    <!-- Completion text (e.g. "2 of 3 rosaries today") -->
-    <TextView
-        android:id="@+id/textViewCompletion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintTop_toBottomOf="@id/controlsRow"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/sliderRosaryCount"
-        android:layout_marginTop="24dp"
-        tools:text="2 of 3 rosaries today" />
+            <!-- Bead row — 5 mysteries of the current set -->
+            <LinearLayout
+                android:id="@+id/beadRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewMysteryNumber">
 
-    <!-- Rosary count label -->
-    <TextView
-        android:id="@+id/textViewSliderLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:text="Target rosaries per day"
-        app:layout_constraintTop_toBottomOf="@id/textViewCompletion"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="24dp" />
+                <View
+                    android:id="@+id/bead0"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/bead_empty" />
 
-    <!-- Rosary count slider (1-4) -->
-    <SeekBar
-        android:id="@+id/sliderRosaryCount"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:min="1"
-        android:max="4"
-        app:layout_constraintTop_toBottomOf="@id/textViewSliderLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+                <View
+                    android:id="@+id/bead1"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/bead_empty" />
 
-    <!-- Mode and Audio toggles -->
+                <View
+                    android:id="@+id/bead2"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/bead_empty" />
+
+                <View
+                    android:id="@+id/bead3"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/bead_empty" />
+
+                <View
+                    android:id="@+id/bead4"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/bead_empty" />
+            </LinearLayout>
+
+            <!-- Countdown Timer -->
+            <TextView
+                android:id="@+id/textViewCountdown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/gold_variant"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/beadRow"
+                tools:text="02:00" />
+
+            <!-- Audio progress -->
+            <com.google.android.material.slider.Slider
+                android:id="@+id/audioProgressBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:valueFrom="0"
+                android:valueTo="100000"
+                app:labelBehavior="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewCountdown"
+                app:trackColorInactive="@color/slider_track_inactive" />
+
+            <!-- Controls -->
+            <LinearLayout
+                android:id="@+id/controlsRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/audioProgressBar">
+
+                <ImageButton
+                    android:id="@+id/buttonPrevious"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/bg_button_circle_tonal"
+                    android:contentDescription="Previous"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_skip_previous"
+                    app:tint="@color/deep_blue" />
+
+                <ImageButton
+                    android:id="@+id/buttonPlayPause"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_marginHorizontal="8dp"
+                    android:background="@drawable/bg_button_circle_primary"
+                    android:contentDescription="Play/Pause"
+                    android:padding="24dp"
+                    android:src="@drawable/ic_play_arrow"
+                    app:tint="@color/white" />
+
+                <ImageButton
+                    android:id="@+id/buttonNext"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/bg_button_circle_tonal"
+                    android:contentDescription="Next"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_skip_next"
+                    app:tint="@color/deep_blue" />
+            </LinearLayout>
+
+            <!-- Completion text and Reset -->
+            <LinearLayout
+                android:id="@+id/completionContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/controlsRow">
+
+                <TextView
+                    android:id="@+id/textViewCompletion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey_dark"
+                    android:textSize="14sp"
+                    tools:text="2 of 3 rosaries today" />
+
+                <ImageButton
+                    android:id="@+id/buttonReset"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Reset Progress"
+                    android:src="@drawable/ic_reset"
+                    app:tint="@color/grey_dark" />
+            </LinearLayout>
+
+            <!-- Rosary count slider with label -->
+            <LinearLayout
+                android:id="@+id/rosaryCountContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/completionContainer">
+
+                <TextView
+                    android:id="@+id/textViewSliderLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Target rosaries per day"
+                    android:textColor="@color/grey_dark"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/textViewSliderValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/gold_variant"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="3" />
+            </LinearLayout>
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/sliderRosaryCount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:stepSize="1"
+                android:valueFrom="1"
+                android:valueTo="4"
+                app:labelBehavior="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rosaryCountContainer"
+                app:trackColorInactive="@color/slider_track_inactive" />
+
+            <!-- Mystery Timer slider with label -->
+            <LinearLayout
+                android:id="@+id/timerContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sliderRosaryCount">
+
+                <TextView
+                    android:id="@+id/textViewTimerLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Minutes per mystery"
+                    android:textColor="@color/grey_dark"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/textViewTimerValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/gold_variant"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="2 min" />
+            </LinearLayout>
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/sliderMysteryTimer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:stepSize="1"
+                android:valueFrom="1"
+                android:valueTo="10"
+                app:labelBehavior="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/timerContainer"
+                app:trackColorInactive="@color/slider_track_inactive" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <!-- Toggles — pill buttons with checked/unchecked styling. Pinned below
+         the scroll area at the bottom of the screen. -->
     <LinearLayout
         android:id="@+id/togglesRow"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:orientation="horizontal"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/sliderRosaryCount"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp">
+        android:paddingBottom="8dp">
 
         <ToggleButton
             android:id="@+id/toggleMode"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:textOn="Liturgical"
+            android:background="@drawable/bg_toggle"
+            android:letterSpacing="0.05"
+            android:textColor="@color/text_toggle"
             android:textOff="Custom"
-            android:layout_marginEnd="8dp" />
+            android:textOn="Liturgical"
+            android:textSize="13sp" />
 
         <ToggleButton
             android:id="@+id/toggleAudio"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:textOn="Audio On"
+            android:background="@drawable/bg_toggle"
+            android:letterSpacing="0.05"
+            android:textColor="@color/text_toggle"
             android:textOff="Audio Off"
-            android:layout_marginStart="8dp" />
-
+            android:textOn="Audio On"
+            android:textSize="13sp" />
     </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

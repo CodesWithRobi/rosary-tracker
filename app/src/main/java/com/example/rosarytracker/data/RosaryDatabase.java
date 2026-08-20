@@ -10,16 +10,12 @@ import java.util.Locale;
 
 /**
  * Room database for persisting rosary state across restarts.
- * Single table: rosary_state (singleton row with id=1).
  */
 @Database(entities = {RosaryState.class}, version = 1, exportSchema = false)
 public abstract class RosaryDatabase extends RoomDatabase {
 
     private static volatile RosaryDatabase INSTANCE;
 
-    /**
-     * Returns the singleton database instance using double-checked locking.
-     */
     public static RosaryDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (RosaryDatabase.class) {
@@ -35,10 +31,6 @@ public abstract class RosaryDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    /**
-     * Returns the DAO for rosary state operations.
-     * Room auto-generates the implementation from this abstract method.
-     */
     public abstract RosaryStateDao rosaryStateDao();
 
     /**
@@ -46,14 +38,17 @@ public abstract class RosaryDatabase extends RoomDatabase {
      */
     public static RosaryState createDefaultState() {
         RosaryState state = new RosaryState();
-        state.currentMysteryIndex = 0;
         state.todayCompletions = 0;
         state.lastResetDate = new SimpleDateFormat("yyyy-MM-dd", Locale.US)
                 .format(Calendar.getInstance().getTime());
-        state.audioEnabled = false;
+        state.audioEnabled = true;
         state.mode = "LITURGICAL";
         state.targetRosaries = 1;
         state.isPlaying = false;
+        
+        // Initialize to today's liturgical mystery set
+        state.currentMysteryIndex = MysterySet.toGlobalIndex(MysterySet.getLiturgicalSet(), 0);
+
         return state;
     }
 }
